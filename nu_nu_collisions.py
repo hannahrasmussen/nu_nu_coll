@@ -173,7 +173,7 @@ def A4(i,f,p,dp):
     BP=np.zeros(len(f)-1-i)
     BN=np.zeros(len(f)-1-i)
     v=0
-    for j in range(i,len(f)-1): #why len(f)-1? Also doesn't i get included twice, in both A1-3 and in A4-6?
+    for j in range(i,len(f)-1): #doesn't i get included twice, in both A1-3 and in A4-6?
         BP[v],BN[v]=B4(i,j,f,p,dp)
         v=v+1
     AP=(dp/2)*(np.sum(2*BP)-BP[0]-BP[-1])
@@ -282,7 +282,7 @@ def cI(i,f,p):
 def C(p,f):
     c=np.zeros(len(p))
     FRS=np.zeros(len(p))
-    for i in prange(1,len(p)-1): #i only goes up to 199 because in a# def's goes i-200 nd if i is 200 then len0
+    for i in prange(1,len(p)-1): #i only goes up to len(p)-2 because in the A functions, BP and BN have length len(f)-1-i, so if  len(BP) = len(BN) = len(f)-1-i and i goes up to len(p)-1, then len(BP) = len(BN) = 0 which we don't want (len(p)=len(f))
         c[i],FRS[i]=cI(i,f,p)
         if (np.abs(c[i])/FRS[i])<=3e-15:
             c[i]=0
@@ -293,7 +293,7 @@ def C(p,f):
 def C_nopar(p,f):
     c=np.zeros(len(p))
     FRS=np.zeros(len(p))
-    for i in prange(1,len(p)-1): #i only goes up to 199 because in a# def's goes i-200 nd if i is 200 then len0
+    for i in prange(1,len(p)-1):
         c[i],FRS[i]=cI(i,f,p)
         if (np.abs(c[i])/FRS[i])<=3e-15:
             c[i]=0
