@@ -68,18 +68,14 @@ def A1(i,f,p,dp):
 
 @jit(nopython=True)
 def B2(i,j,f,p,dp):
-    #if j>=i: m=i, n=j+1, o=-1
-    #else: m=j, n=i+1, o=1
     if i+j>=len(f)-1:
         u=len(f)-1
         h=(i+j)-u
     else:
         u=i+j
         h=0
-    #k=np.zeros(n-m)
     k = np.zeros(i+1-j)
     w=0
-    #for q in range(m,n):
     for q in range(j,i+1):
         k[w]=q
         w=w+1
@@ -88,12 +84,12 @@ def B2(i,j,f,p,dp):
     for q in range(len(k)):
         FpJ2 = FpJ2 + (2*((1-f[i])*(1-f[j])*f[int(k[q])]*f[int(i+j-k[q])]*J2(p[i],p[j])))
         FmJ2 = FmJ2 + (2*(f[i]*f[j]*(1-f[int(k[q])])*(1-f[int(i+j-k[q])])*J2(p[i],p[j])))
-    FpJ2i = (1-f[i])*(1-f[j])*f[i]*f[j]*J2(p[i],p[j])
+    FpJ2i = (1-f[i])*(1-f[j])*f[i]*f[j]*J2(p[i],p[j]) 
     FpJ2f = (1-f[i])*(1-f[j])*f[j]*f[i]*J2(p[i],p[j])
     FmJ2i = f[i]*f[j]*(1-f[i])*(1-f[j])*J2(p[i],p[j])
     FmJ2f = f[i]*f[j]*(1-f[j])*(1-f[i])*J2(p[i],p[j])
-    BP = (dp/2)*(FpJ2-FpJ2i-FpJ2f) #*o
-    BN = (dp/2)*(FmJ2-FmJ2i-FmJ2f) #*o
+    BP = (dp/2)*(FpJ2-FpJ2i-FpJ2f)
+    BN = (dp/2)*(FmJ2-FmJ2i-FmJ2f)
     return BP,BN
 
 @jit(nopython=True)
@@ -136,7 +132,7 @@ def B3(i,j,f,p,dp):
 def A3(i,f,p,dp):
     BP=np.zeros(i+1)
     BN=np.zeros(i+1)
-    for j in range(i+1): #doesn't i get included twice, in both A1-3 and in A4-6?
+    for j in range(i+1): 
         BP[j],BN[j]=B3(i,j,f,p,dp)
     AP=(dp/2)*(np.sum(2*BP)-BP[0]-BP[-1])
     AN=(dp/2)*(np.sum(2*BN)-BN[0]-BN[-1])
@@ -173,7 +169,7 @@ def A4(i,f,p,dp):
     BP=np.zeros(len(f)-1-i)
     BN=np.zeros(len(f)-1-i)
     v=0
-    for j in range(i,len(f)-1): #doesn't i get included twice, in both A1-3 and in A4-6?
+    for j in range(i,len(f)-1): 
         BP[v],BN[v]=B4(i,j,f,p,dp)
         v=v+1
     AP=(dp/2)*(np.sum(2*BP)-BP[0]-BP[-1])
@@ -182,18 +178,14 @@ def A4(i,f,p,dp):
 
 @jit(nopython=True)
 def B5(i,j,f,p,dp):
-    #if i>=j: m=j, n=i+1, o=-1
-    #else: m=i, n=j+1, o=1
     if i+j>=len(f)-1:
         u=len(f)-1
         h=(i+j)-u
     else:
         u=i+j
         h=0
-    #k=np.zeros(n-m)
     k = np.zeros(j+1-i)
     w=0
-    #for q in range(m,n):
     for q in range(i,j+1):
         k[w]=q
         w=w+1
@@ -206,8 +198,8 @@ def B5(i,j,f,p,dp):
     FpJ2f = (1-f[i])*(1-f[j])*f[j]*f[i]*J2(p[j],p[i])
     FmJ2i = f[i]*f[j]*(1-f[i])*(1-f[j])*J2(p[j],p[i])
     FmJ2f = f[i]*f[j]*(1-f[j])*(1-f[i])*J2(p[j],p[i])
-    BP = (dp/2)*(FpJ2-FpJ2i-FpJ2f) #*o
-    BN = (dp/2)*(FmJ2-FmJ2i-FmJ2f) #*o
+    BP = (dp/2)*(FpJ2-FpJ2i-FpJ2f)
+    BN = (dp/2)*(FmJ2-FmJ2i-FmJ2f)
     return BP,BN
 
 @jit(nopython=True)
@@ -282,7 +274,7 @@ def cI(i,f,p):
 def C(p,f):
     c=np.zeros(len(p))
     FRS=np.zeros(len(p))
-    for i in prange(1,len(p)-1): #i only goes up to len(p)-2 because in the A functions, BP and BN have length len(f)-1-i, so if  len(BP) = len(BN) = len(f)-1-i and i goes up to len(p)-1, then len(BP) = len(BN) = 0 which we don't want (len(p)=len(f))
+    for i in prange(1,len(p)-1): 
         c[i],FRS[i]=cI(i,f,p)
         if (np.abs(c[i])/FRS[i])<=3e-15:
             c[i]=0
